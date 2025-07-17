@@ -1,6 +1,5 @@
 package com.amusement.amusement_park.config;
 
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +21,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/api/users/**").permitAll()
+                        .requestMatchers("/", "/home", "/api/users/**", "/api/membership-plans").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // ensure role prefix
+                        .requestMatchers(" /api/user-memberships/**").hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers("/api/profile/**").authenticated()
                         .anyRequest().authenticated())
                 .httpBasic(); // Use formLogin() for login UI

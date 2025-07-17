@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.amusement.amusement_park.dto.UserProfile;
+//import com.amusement.amusement_park.dto.UserProfile;
 
 import java.util.List;
 

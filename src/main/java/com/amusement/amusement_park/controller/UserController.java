@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
+import com.amusement.amusement_park.util.JwtUtil;
+
 import java.util.Map;
 
 @RestController
@@ -24,6 +26,7 @@ public class UserController {
     private final OtpStore otpStore;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody Map<String, String> body) {
@@ -72,24 +75,6 @@ public class UserController {
                 .orElse(ResponseEntity.badRequest().body("User not found."));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-
-        return userRepository.findByEmail(email)
-                .map(user -> {
-                    if (!user.isVerified()) {
-                        return ResponseEntity.badRequest().body("Account not verified. Please verify OTP.");
-                    }
-                    if (!passwordEncoder.matches(password, user.getPassword())) {
-                        return ResponseEntity.badRequest().body("Incorrect password.");
-                    }
-                    return ResponseEntity.ok("Login successful. Welcome " + user.getRole() + "!");
-                })
-                .orElse(ResponseEntity.badRequest().body("User not found."));
-    }
-
     @PostMapping("/resend-otp")
     public ResponseEntity<String> resendOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -107,7 +92,6 @@ public class UserController {
         String otp = OtpGenerator.generateOtp();
         otpStore.storeOtp(email, otp);
 
-        // System.out.println("Resent OTP for " + email + " is: " + otp);
         logger.info("Resent OTP for {} is: {}", email, otp);
 
         return ResponseEntity.ok("OTP resent to your email (console for now).");

@@ -14,33 +14,7 @@ import com.amusement.amusement_park.dto.UserProfile;
 public class UserProfileController {
 
     private final UserRepository userRepository;
-    /*
-     * @GetMapping("/{email}")
-     * public ResponseEntity<User> getProfileByEmail(@PathVariable String email) {
-     * return userRepository.findByEmail(email)
-     * .map(ResponseEntity::ok)
-     * .orElse(ResponseEntity.notFound().build());
-     * }
-     */
 
-    /*
-     * @PutMapping("/update/{email}")
-     * public ResponseEntity<String> updateProfileByEmail(
-     * 
-     * @PathVariable String email,
-     * 
-     * @RequestBody User updatedUser) {
-     * 
-     * return userRepository.findByEmail(email).map(user -> {
-     * user.setRole(updatedUser.getRole() != null ? updatedUser.getRole() :
-     * user.getRole());
-     * user.setName(updatedUser.getName() != null ? updatedUser.getName() :
-     * user.getName());
-     * userRepository.save(user);
-     * return ResponseEntity.ok("Profile updated successfully.");
-     * }).orElse(ResponseEntity.badRequest().body("User not found."));
-     * }
-     */
     @GetMapping("/{email}")
     public ResponseEntity<UserProfile> getProfileByEmail(@PathVariable String email) {
         return userRepository.findByEmail(email).map(user -> {
